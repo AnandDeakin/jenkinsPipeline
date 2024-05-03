@@ -15,13 +15,13 @@ pipeline{
             }
             post {
                 success{
-                    emailext to: "preethisai597@gmail.com",
+                    emailext to: "anandchowdary521@gmail.com",
                     subject: "Testing Status Email",
                     body: "Testing was successful",
                     attachmentsPattern: 'test.log'
                 }
                 failure{
-                    emailext to: "preethisai597@gmail.com",
+                    emailext to: "anandchowdary521@gmail.com",
                     subject: "Testing Status Email",
                     body: "Testing was Failed",
                     attachmentsPattern: 'test.log'
