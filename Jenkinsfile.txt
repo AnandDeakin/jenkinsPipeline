@@ -11,20 +11,20 @@ pipeline{
             steps{
                 echo "Testing...."
                 echo "We use 'Mockito' tool for Unit testing and 'Cucumber' tool for Integration testing."
-                sh 'echo "Any logs in Unit Testing and Integration Testing will be displayed here." > test.log'
+                
             }
             post {
                 success{
-                    emailext to: "anandchowdary521@gmail.com",
+                    mail to: "anandchowdary521@gmail.com",
                     subject: "Testing Status Email",
-                    body: "Testing was successful",
-                    attachmentsPattern: 'test.log'
+                    body: "Testing was successful"
+                    
                 }
                 failure{
-                    emailext to: "anandchowdary521@gmail.com",
+                    mail to: "anandchowdary521@gmail.com",
                     subject: "Testing Status Email",
-                    body: "Testing was Failed",
-                    attachmentsPattern: 'test.log'
+                    body: "Testing was Failed"
+                  
                 }
             }
         }
@@ -42,16 +42,16 @@ pipeline{
             }
             post {
                 success{
-                    emailext to: "anandchowdary521@gmail.com",
+                    mail to: "anandchowdary521@gmail.com",
                     subject: "Scanning Status Email",
-                    body: "Scanning was successful",
-                    attachmentsPattern: 'security.log'
+                    body: "Scanning was successful"
+                  
                 }
                 failure{
-                    emailext to: "anandchowdary521@gmail.com",
+                    mail to: "anandchowdary521@gmail.com",
                     subject: "Scanning Status Email",
-                    body: "Scanning was Failed",
-                    attachmentsPattern: 'security.log'
+                    body: "Scanning was Failed"
+                  
                 }
             }
         }
