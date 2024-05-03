@@ -55,7 +55,7 @@ pipeline {
     post {
         always {
             // Send notification emails at the end of test and security scan stages
-            emailext attachLog: true, recipientProviders: [[$class: 'CulpritsRecipientProvider']], subject: "${currentBuild.result}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'", body: "${currentBuild.result}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n\nCheck console output at ${env.BUILD_URL} to view the results.", to: "anandchowdary521@gmail.com.com"
+            emailext attachLog: true, recipientProviders: [[$class: 'CulpritsRecipientProvider']], subject: "${currentBuild.result}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'", body: "${currentBuild.result}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n\nCheck console output at ${env.BUILD_URL} to view the results.", to: "anandchowdary521@gmail.com"
         }
     }
 }
