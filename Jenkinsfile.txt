@@ -11,14 +11,14 @@ pipeline{
             steps{
                 echo "Testing...."
                 echo "We use 'Mockito' tool for Unit testing and 'Cucumber' tool for Integration testing."
-                
+                sh 'echo "Any logs in Unit Testing and Integration Testing will be displayed here." > test.log'
             }
             post {
                 success{
                     emailext to: "anandchowdary521@gmail.com",
                     subject: "Testing Status Email",
-                    body: "Testing was successful"
-               
+                    body: "Testing was successful",
+                    attachmentsPattern: 'test.log'
                 }
                 failure{
                     emailext to: "anandchowdary521@gmail.com",
@@ -38,20 +38,20 @@ pipeline{
             steps{
                 echo "Security Scan...."
                 echo "The 'OWASP Dependency-Check' is used for security scanning in Jenkins."
-            
+                sh 'echo "Any logs in Scanning phase will be displayed here." > security.log'
             }
             post {
                 success{
                     emailext to: "anandchowdary521@gmail.com",
                     subject: "Scanning Status Email",
-                    body: "Scanning was successful"
-                   
+                    body: "Scanning was successful",
+                    attachmentsPattern: 'security.log'
                 }
                 failure{
                     emailext to: "anandchowdary521@gmail.com",
                     subject: "Scanning Status Email",
-                    body: "Scanning was Failed"
-                    
+                    body: "Scanning was Failed",
+                    attachmentsPattern: 'security.log'
                 }
             }
         }
@@ -75,5 +75,3 @@ pipeline{
         }
     }
 }
-
-
