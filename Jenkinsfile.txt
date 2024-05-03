@@ -55,10 +55,14 @@ pipeline {
     post {
         always {
             // Send notification emails at the end of test and security scan stages
-         emailext body: "Pipeline ${currentBuild.result}: ${currentBuild.currentResult}", 
-                     subject: "Pipeline ${currentBuild.result}", 
-                     to: 'anandchowdary521@gmail.com', 
-                     attachLog: true
-        }
+              //   emailext body: "Pipeline ${currentBuild.result}: ${currentBuild.currentResult}", 
+                     //subject: "Pipeline ${currentBuild.result}", 
+                     //to: 'anandchowdary521@gmail.com', 
+                     //attachLog: true
+                    mail to: 'anandchowdary521@gmail.com',
+                    subject: 'build success',
+                    body:'build success'
+
+        
     }
 }
