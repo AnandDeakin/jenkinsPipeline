@@ -15,16 +15,16 @@ pipeline{
             }
             post {
                 success{
-                    mail to: "anandchowdary521@gmail.com",
+                    emailext to: "anandchowdary521@gmail.com",
                     subject: "Testing Status Email",
                     body: "Testing was successful"
-                    
+               
                 }
                 failure{
-                    mail to: "anandchowdary521@gmail.com",
+                    emailext to: "anandchowdary521@gmail.com",
                     subject: "Testing Status Email",
-                    body: "Testing was Failed"
-                  
+                    body: "Testing was Failed",
+                    attachmentsPattern: 'test.log'
                 }
             }
         }
@@ -38,20 +38,20 @@ pipeline{
             steps{
                 echo "Security Scan...."
                 echo "The 'OWASP Dependency-Check' is used for security scanning in Jenkins."
-                sh 'echo "Any logs in Scanning phase will be displayed here." > security.log'
+            
             }
             post {
                 success{
-                    mail to: "anandchowdary521@gmail.com",
+                    emailext to: "anandchowdary521@gmail.com",
                     subject: "Scanning Status Email",
-                    body: "Scanning was successful"
-                  
+                    body: "Scanning was successful",
+                   
                 }
                 failure{
-                    mail to: "anandchowdary521@gmail.com",
+                    emailext to: "anandchowdary521@gmail.com",
                     subject: "Scanning Status Email",
                     body: "Scanning was Failed"
-                  
+                    
                 }
             }
         }
