@@ -1,66 +1,77 @@
-pipeline {
+pipeline{
     agent any
-    
-    stages {
-        stage('Build') {
-            steps {
-                // Build the code using Maven
-                echo "Building the code using Maven"
+    stages{
+        stage('Build'){
+            steps{
+                echo "Building...."
+                echo "We complie and Build the code using 'Gradle' tool."
             }
         }
-        
-        stage('Unit and Integration Tests') {
-            steps {
-                // Run unit tests and integration tests
-                echo "Running unit tests and integration tests"
+        stage('Unit and Integration Tests '){
+            steps{
+                echo "Testing...."
+                echo "We use 'Mockito' tool for Unit testing and 'Cucumber' tool for Integration testing."
+                sh 'echo "Any logs in Unit Testing and Integration Testing will be displayed here." > test.log'
+            }
+            post {
+                success{
+                    emailext to: "preethisai597@gmail.com",
+                    subject: "Testing Status Email",
+                    body: "Testing was successful",
+                    attachmentsPattern: 'test.log'
+                }
+                failure{
+                    emailext to: "preethisai597@gmail.com",
+                    subject: "Testing Status Email",
+                    body: "Testing was Failed",
+                    attachmentsPattern: 'test.log'
+                }
             }
         }
-        
-        stage('Code Analysis') {
-            steps {
-                // Integrate a code analysis tool (e.g., SonarQube)
-                echo "Running code analysis using SonarQube"
+        stage('Code Analysis'){
+            steps{
+                echo "Code Analysis...."
+                echo "The tool used for analyzing code using Jenkins is 'SonarQube'."
             }
         }
-        
-        stage('Security Scan') {
-            steps {
-                // Perform security scan using a tool (e.g., OWASP Dependency-Check)
-                echo "Performing security scan"
+        stage('Security Scan'){
+            steps{
+                echo "Security Scan...."
+                echo "The 'OWASP Dependency-Check' is used for security scanning in Jenkins."
+                sh 'echo "Any logs in Scanning phase will be displayed here." > security.log'
+            }
+            post {
+                success{
+                    emailext to: "anandchowdary521@gmail.com",
+                    subject: "Scanning Status Email",
+                    body: "Scanning was successful",
+                    attachmentsPattern: 'security.log'
+                }
+                failure{
+                    emailext to: "anandchowdary521@gmail.com",
+                    subject: "Scanning Status Email",
+                    body: "Scanning was Failed",
+                    attachmentsPattern: 'security.log'
+                }
             }
         }
-        
-        stage('Deploy to Staging') {
-            steps {
-                // Deploy the application to staging server (e.g., AWS EC2)
-                echo "Deploying to staging server (AWS EC2)"
+        stage('Deploy to Staging'){
+            steps{
+                echo "Deploy to Staging...."
+                echo "We deploy the application to server using 'AWS CodeDeploy'."
             }
         }
-        
-        stage('Integration Tests on Staging') {
-            steps {
-                // Run integration tests on staging environment
-                echo "Running integration tests on staging environment"
+        stage('Integration Tests on Staging'){
+            steps{
+                echo "Integration Tests on Staging...."
+                echo "We use the above Mockito and Cucumber testing tools to ensure the application performs as expected. "
             }
         }
-        
-        stage('Deploy to Production') {
-            steps {
-                // Deploy the application to production server (e.g., AWS EC2)
-                echo "Deploying to production server (AWS EC2)"
+        stage('Deploy to Production'){
+            steps{
+                echo "Deploy to Production...."
+                echo "Deploy the application to Production server."
             }
-        }
-    }
-    
-    post {
-        always {
-            // Send notification emails at the end of test and security scan stages
-              
-            emailext body: "Pipeline successful",
-                     subject: "Pipeline successful",
-                     to: "anandchowdary521@gmail.com",
-                     attachLog: true
-       
         }
     }
 }
