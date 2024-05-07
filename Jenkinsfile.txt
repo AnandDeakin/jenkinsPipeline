@@ -73,11 +73,16 @@ pipeline {
     }
     
     post {
-        always {
-            // Send email notifications
-            emailext body: "Pipeline ${currentBuild.result}: ${currentBuild.currentResult}", 
-                     subject: "Pipeline ${currentBuild.result}", 
-                     to: 'anandchowdary521@gmail.com', 
+        success {
+            emailext body: "Pipeline successful",
+                     subject: "Pipeline successful",
+                     to: "anandchowdary521@gmail.com",
+                     attachLog: true
+        }
+        failure {
+            emailext body: "Pipeline failed",
+                     subject: "Pipeline failed",
+                     to: "anandchowdary521@gmail.com",
                      attachLog: true
         }
     }
