@@ -4,86 +4,62 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    // Build the code using Maven
-                    sh 'mvn clean package'
-                }
+                echo '=== Stage 1: Build ==='
+                echo 'Building the code using Maven...'
+                sh 'mvn clean package'
             }
         }
-        
         stage('Unit and Integration Tests') {
             steps {
-                script {
-                    // Run unit tests
-                    sh 'mvn test'
-                    
-                    // Run integration tests
-                    // Assuming you have integration tests in a separate directory
-                    sh 'mvn integration-test'
-                }
+                echo '=== Stage 2: Unit and Integration Tests ==='
+                echo 'Running unit tests...'
+                sh 'mvn test'
+                // Run integration tests
+                echo 'Running integration tests...'
             }
         }
-        
         stage('Code Analysis') {
             steps {
-                script {
-                    // Run code analysis using SonarQube
-                    sh 'sonar-scanner'
-                }
+                echo '=== Stage 3: Code Analysis ==='
+                echo 'Running code analysis with SonarQube...'
+                // Integrate with SonarQube
             }
         }
-        
         stage('Security Scan') {
             steps {
-                script {
-                    // Run security scan using OWASP Dependency-Check
-                    sh 'mvn org.owasp:dependency-check-maven:check'
-                }
+                echo '=== Stage 4: Security Scan ==='
+                echo 'Performing security scan...'
+                // Perform security scan
             }
         }
-        
         stage('Deploy to Staging') {
             steps {
-                script {
-                    // Deploy the application to staging using AWS CodeDeploy or Docker
-                    sh 'aws deploy push --application-name MyApp --s3-location s3://mybucket/myapp.zip --ignore-hidden-files'
-                }
+                echo '=== Stage 5: Deploy to Staging ==='
+                echo 'Deploying the application to staging server...'
+                // Deploy to staging server
             }
         }
-        
         stage('Integration Tests on Staging') {
             steps {
-                script {
-                    // Run integration tests on staging environment
-                    // This could involve deploying the application to staging and then running tests against it
-                    // For example, using Selenium or Postman
-                    sh 'selenium-tests.sh'
-                }
+                echo '=== Stage 6: Integration Tests on Staging ==='
+                echo 'Running integration tests on staging environment...'
+                // Run integration tests on staging
             }
         }
-        
         stage('Deploy to Production') {
             steps {
-                script {
-                    // Deploy the application to production using AWS CodeDeploy or Docker
-                    sh 'aws deploy push --application-name MyApp --s3-location s3://mybucket/myapp.zip --ignore-hidden-files'
-                }
+                echo '=== Stage 7: Deploy to Production ==='
+                echo 'Deploying the application to production server...'
+                // Deploy to production server
             }
         }
     }
     
     post {
-        success {
-            emailext body: "Pipeline successful",
-                     subject: "Pipeline successful",
-                     to: "anandchowdary521@gmail.com",
-                     attachLog: true
-        }
-        failure {
-            emailext body: "Pipeline failed",
-                     subject: "Pipeline failed",
-                     to: "anandchowdary521@gmail.com",
-                     attachLog: true
+        always {
+            echo 'Sending notification email...'
+            // Email notification configuration
+            emailext attachLog: true, subject: 'Pipeline Status: ${currentBuild.result}', to: 'anandchowdary521@gmail.com'
         }
     }
 }
