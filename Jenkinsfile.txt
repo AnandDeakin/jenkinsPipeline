@@ -1,77 +1,84 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage('Build'){
-            steps{
-                echo "Building...."
-                echo "We complie and Build the code using 'Gradle' tool."
-            }
-        }
-        stage('Unit and Integration Tests '){
-            steps{
-                echo "Testing...."
-                echo "We use 'Mockito' tool for Unit testing and 'Cucumber' tool for Integration testing."
-                sh 'echo "Any logs in Unit Testing and Integration Testing will be displayed here." > test.log'
-            }
-            post {
-                success{
-                    emailext to: "anandchowdary521@gmail.com",
-                    subject: "Testing Status Email",
-                    body: "Testing was successful",
-                    attachmentsPattern: 'test.log'
-                }
-                failure{
-                    emailext to: "anandchowdary521@gmail.com",
-                    subject: "Testing Status Email",
-                    body: "Testing was Failed",
-                    attachmentsPattern: 'test.log'
+    
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Build the code using Maven
+                    sh 'mvn clean package'
                 }
             }
         }
-        stage('Code Analysis'){
-            steps{
-                echo "Code Analysis...."
-                echo "The tool used for analyzing code using Jenkins is 'SonarQube'."
-            }
-        }
-        stage('Security Scan'){
-            steps{
-                echo "Security Scan...."
-                echo "The 'OWASP Dependency-Check' is used for security scanning in Jenkins."
-                sh 'echo "Any logs in Scanning phase will be displayed here." > security.log'
-            }
-            post {
-                success{
-                    emailext to: "anandchowdary521@gmail.com",
-                    subject: "Scanning Status Email",
-                    body: "Scanning was successful",
-                    attachmentsPattern: 'security.log'
-                }
-                failure{
-                    emailext to: "anandchowdary521@gmail.com",
-                    subject: "Scanning Status Email",
-                    body: "Scanning was Failed",
-                    attachmentsPattern: 'security.log'
+        
+        stage('Unit and Integration Tests') {
+            steps {
+                script {
+                    // Run unit tests
+                    sh 'mvn test'
+                    
+                    // Run integration tests
+                    // Assuming you have integration tests in a separate directory
+                    sh 'mvn integration-test'
                 }
             }
         }
-        stage('Deploy to Staging'){
-            steps{
-                echo "Deploy to Staging...."
-                echo "We deploy the application to server using 'AWS CodeDeploy'."
+        
+        stage('Code Analysis') {
+            steps {
+                script {
+                    // Run code analysis using SonarQube
+                    sh 'sonar-scanner'
+                }
             }
         }
-        stage('Integration Tests on Staging'){
-            steps{
-                echo "Integration Tests on Staging...."
-                echo "We use the above Mockito and Cucumber testing tools to ensure the application performs as expected. "
+        
+        stage('Security Scan') {
+            steps {
+                script {
+                    // Run security scan using OWASP Dependency-Check
+                    sh 'mvn org.owasp:dependency-check-maven:check'
+                }
             }
         }
-        stage('Deploy to Production'){
-            steps{
-                echo "Deploy to Production...."
-                echo "Deploy the application to Production server."
+        
+        stage('Deploy to Staging') {
+            steps {
+                script {
+                    // Deploy the application to staging using AWS CodeDeploy or Docker
+                    sh 'aws deploy push --application-name MyApp --s3-location s3://mybucket/myapp.zip --ignore-hidden-files'
+                }
             }
+        }
+        
+        stage('Integration Tests on Staging') {
+            steps {
+                script {
+                    // Run integration tests on staging environment
+                    // This could involve deploying the application to staging and then running tests against it
+                    // For example, using Selenium or Postman
+                    sh 'selenium-tests.sh'
+                }
+            }
+        }
+        
+        stage('Deploy to Production') {
+            steps {
+                script {
+                    // Deploy the application to production using AWS CodeDeploy or Docker
+                    sh 'aws deploy push --application-name MyApp --s3-location s3://mybucket/myapp.zip --ignore-hidden-files'
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            // Send email notifications
+            emailext body: "Pipeline ${currentBuild.result}: ${currentBuild.currentResult}", 
+                     subject: "Pipeline ${currentBuild.result}", 
+                     to: 'anandchowdary521@gmail.com', 
+                     attachLog: true
         }
     }
 }
