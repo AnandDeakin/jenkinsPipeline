@@ -6,14 +6,14 @@ pipeline {
             steps {
                 echo '=== Stage 1: Build ==='
                 echo 'Building the code using Maven...'
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo '=== Stage 2: Unit and Integration Tests ==='
                 echo 'Running unit tests...'
-                sh 'mvn test'
+                bat 'mvn test'
                 // Run integration tests
                 echo 'Running integration tests...'
             }
@@ -59,7 +59,7 @@ pipeline {
         always {
             echo 'Sending notification email...'
             // Email notification configuration
-            emailext attachLog: true, body: "Pipeline ${currentBuild.result}: ${currentBuild.currentResult}", subject: 'Pipeline Status: ${currentBuild.result}', to: 'anandchowdary521@gmail.com'
+            emailext attachLog: true, subject: 'Pipeline Status: ${currentBuild.result}', to: 'your@email.com'
         }
     }
 }
